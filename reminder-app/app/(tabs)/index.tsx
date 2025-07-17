@@ -64,6 +64,7 @@ export default function HomeScreen() {
 
         return !isPast && isTodayOrTomorrow;
       }).length;
+
       setCount(nearDueCount);
       setReminders(data);
     }
@@ -228,6 +229,7 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
       <SwipeListView
+        keyboardShouldPersistTaps="handled"
         data={reminders}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -250,14 +252,13 @@ export default function HomeScreen() {
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => handleDelete(item.id)}
+              style={styles.rowBack}
             >
-              <ThemedView style={styles.rowBack}>
-                <IconSymbol
-                  size={24}
-                  name="trash.fill"
-                  color={Colors[theme]?.primary}
-                />
-              </ThemedView>
+              <IconSymbol
+                size={24}
+                name="trash.fill"
+                color={Colors[theme]?.primary}
+              />
             </TouchableOpacity>
           ) : (
             <ThemedView
@@ -302,6 +303,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingRight: 24,
     borderRadius: 12,
-    height: 100,
+    height: 90,
   },
 });

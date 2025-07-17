@@ -40,7 +40,7 @@ export default function ReminderLayout() {
                   color: Colors[theme].primary,
                 }}
               >
-                เพิ่มรายการใหม่
+                จดบันทึก
               </ThemedText>
             </ThemedView>
           ),

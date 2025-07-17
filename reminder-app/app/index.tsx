@@ -1,4 +1,5 @@
 import { useAuth } from "@/contexts/authContext";
+
 import { Redirect } from "expo-router";
 
 export default function IndexScreen() {

@@ -1,160 +1,138 @@
 import { Image } from "expo-image";
-import { Platform, View, Text, Pressable, StyleSheet } from "react-native";
-
-import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import {
+  StyleSheet,
+  useColorScheme,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Colors } from "@/constants/Colors";
+import { useRouter } from "expo-router";
+import { useAuth } from "@/contexts/authContext";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
-import { useAuth } from "@/contexts/authContext";
-import { useRouter } from "expo-router";
 
-export default function TabTwoScreen() {
+export default function UserScreen() {
   const router = useRouter();
-  const { authUser, logout } = useAuth();
+  const insets = useSafeAreaInsets();
+  const theme = useColorScheme() ?? "light";
+  const { profile, logout } = useAuth();
 
-  const handleLogout = async () => {
+  const handleSignOut = async () => {
     await logout();
-    router.replace("/auth"); // 🔁 Redirect to login
+    router.replace("/auth");
   };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>
-        This app includes example code to help you get started.
-      </ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          and{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{" "}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the
-          web version, press <ThemedText type="defaultSemiBold">w</ThemedText>{" "}
-          in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the{" "}
-          <ThemedText type="defaultSemiBold">@2x</ThemedText> and{" "}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to
-          provide files for different screen densities
-        </ThemedText>
-        <Image
-          source={require("@/assets/images/react-logo.png")}
-          style={{ alignSelf: "center" }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText>{" "}
-          to see how to load{" "}
-          <ThemedText style={{ fontFamily: "SpaceMono" }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{" "}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook
-          lets you inspect what the user&apos;s current color scheme is, and so
-          you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{" "}
-          <ThemedText type="defaultSemiBold">
-            components/HelloWave.tsx
-          </ThemedText>{" "}
-          component uses the powerful{" "}
-          <ThemedText type="defaultSemiBold">
-            react-native-reanimated
-          </ThemedText>{" "}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The{" "}
-              <ThemedText type="defaultSemiBold">
-                components/ParallaxScrollView.tsx
-              </ThemedText>{" "}
-              component provides a parallax effect for the header image.
+    <ThemedView style={{ flex: 1, paddingTop: insets.top + 16 }}>
+      <ThemedView
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingHorizontal: 16,
+          alignItems: "center",
+        }}
+      >
+        <ThemedView style={styles.titleContainer}>
+          <Image
+            source={require("@/assets/images/logo/reminder-logo.png")}
+            style={styles.logo}
+          />
+          <ThemedView>
+            <ThemedText type="default" style={{ color: Colors[theme]?.text }}>
+              สวัสดี!
             </ThemedText>
-          ),
-        })}
-      </Collapsible>
+            <ThemedText type="title" style={{ color: Colors[theme]?.primary }}>
+              {profile?.username}
+            </ThemedText>
+          </ThemedView>
+        </ThemedView>
+      </ThemedView>
+      <ScrollView>
+        {/* Header */}
 
-      <Text style={styles.title}>สวัสดี {authUser?.username}</Text>
+        {/* Buttons Section */}
+        <View
+          style={{ ...styles.buttonContainer, paddingTop: insets?.top + 16 }}
+        >
+          <TouchableOpacity
+            // onPress={() => router.push("/edit-profile")}
+            style={[
+              styles.outlinedButton,
+              { borderColor: Colors[theme].primary },
+            ]}
+          >
+            <ThemedText
+              type="defaultSemiBold"
+              style={{ color: Colors[theme].primary }}
+            >
+              แก้ไขบัญชี
+            </ThemedText>
+          </TouchableOpacity>
 
-      <Pressable style={styles.button} onPress={handleLogout}>
-        <Text style={styles.buttonText}>ออกจากระบบ</Text>
-      </Pressable>
-    </ParallaxScrollView>
+          <TouchableOpacity
+            // onPress={() => router.push("/completed")}
+            style={[
+              styles.outlinedButton,
+              { borderColor: Colors[theme].primary },
+            ]}
+          >
+            <ThemedText
+              type="defaultSemiBold"
+              style={{ color: Colors[theme].primary }}
+            >
+              บันทึกที่สำเร็จแล้ว
+            </ThemedText>
+          </TouchableOpacity>
+        </View>
+
+        {/* Sign Out Button */}
+        <View style={styles.footer}>
+          <TouchableOpacity
+            onPress={handleSignOut}
+            style={[
+              styles.signOutButton,
+              { backgroundColor: Colors[theme].primary },
+            ]}
+          >
+            <ThemedText type="defaultSemiBold" style={{ color: "#fff" }}>
+              ออกจากระบบ
+            </ThemedText>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
-  },
   titleContainer: {
     flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 32,
+  logo: {
+    width: 72,
+    height: 72,
   },
-  button: {
-    backgroundColor: "#EF4444",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+  buttonContainer: {
+    flex: 1,
+    paddingHorizontal: 16,
+    gap: 16,
+  },
+  outlinedButton: {
+    borderWidth: 1.5,
+    padding: 16,
     borderRadius: 8,
+    alignItems: "flex-start",
   },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
+  signOutButton: {
+    marginTop: 32,
+    marginHorizontal: 16,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
   },
+  footer: {},
 });
