@@ -12,6 +12,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/authContext";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { IconSymbol } from "@/components/ui/IconSymbol";
 
 export default function UserScreen() {
   const router = useRouter();
@@ -57,32 +58,41 @@ export default function UserScreen() {
           style={{ ...styles.buttonContainer, paddingTop: insets?.top + 16 }}
         >
           <TouchableOpacity
-            // onPress={() => router.push("/edit-profile")}
+            onPress={() => router.navigate("/reminder/completed")}
             style={[
               styles.outlinedButton,
               { borderColor: Colors[theme].primary },
             ]}
           >
-            <ThemedText
-              type="defaultSemiBold"
-              style={{ color: Colors[theme].primary }}
-            >
-              แก้ไขบัญชี
-            </ThemedText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            // onPress={() => router.push("/completed")}
-            style={[
-              styles.outlinedButton,
-              { borderColor: Colors[theme].primary },
-            ]}
-          >
+            <IconSymbol
+              size={24}
+              name="list.clipboard.fill"
+              color={Colors[theme]?.primary}
+            />
             <ThemedText
               type="defaultSemiBold"
               style={{ color: Colors[theme].primary }}
             >
               บันทึกที่สำเร็จแล้ว
+            </ThemedText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.navigate("/user")}
+            style={[
+              styles.outlinedButton,
+              { borderColor: Colors[theme].primary },
+            ]}
+          >
+            <IconSymbol
+              size={24}
+              name="person.fill"
+              color={Colors[theme]?.primary}
+            />
+            <ThemedText
+              type="defaultSemiBold"
+              style={{ color: Colors[theme].primary }}
+            >
+              แก้ไขบัญชี
             </ThemedText>
           </TouchableOpacity>
         </View>
@@ -126,6 +136,8 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     alignItems: "flex-start",
+    flexDirection: "row",
+    gap: 8,
   },
   signOutButton: {
     marginTop: 32,

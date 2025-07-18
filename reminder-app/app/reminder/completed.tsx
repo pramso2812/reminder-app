@@ -1,4 +1,3 @@
-import { Image } from "expo-image";
 import {
   Alert,
   Keyboard,
@@ -7,40 +6,30 @@ import {
   useColorScheme,
 } from "react-native";
 
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import { useFocusEffect, useRouter } from "expo-router";
 
-import { NotificationBell } from "@/components/module/main/NotificationBell";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 
 import { ReminderCard } from "@/components/module/main/Card";
 import { useCallback, useState } from "react";
-import { FloatingAddButton } from "@/components/module/main/AddButton";
+
 import { type ReminderProps } from "@/components/module/main/Card";
 import { SwipeListView } from "react-native-swipe-list-view";
 
 import { supabase } from "@/lib/supabase";
-import { useAuth } from "@/contexts/authContext";
 
-import { isEmpty } from "lodash";
-
-import dayjs from "dayjs";
-
-export default function HomeScreen() {
+export default function CompletedScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const theme = useColorScheme() ?? "light";
 
-  const { authUser, profile } = useAuth(); // ensure user is logged in
-
-  const [newlyAddedId, setNewlyAddedId] = useState<string | null>(null);
   const [openRowKey, setOpenRowKey] = useState<string | null>(null);
 
   const [reminders, setReminders] = useState<ReminderProps[]>([]);
-  const [count, setCount] = useState<number>(0);
+
   const [loading, setLoading] = useState(false);
 
   const fetchReminders = useCallback(async () => {
@@ -48,24 +37,13 @@ export default function HomeScreen() {
     const { data, error } = await supabase
       .from("reminders")
       .select("*")
-      .eq("is_completed", false)
+      .eq("is_completed", true)
       .eq("is_deleted", false)
       .order("due_date_time", { ascending: true });
 
     if (error) {
       console.error("Error fetching reminders:", error);
     } else {
-      const now = dayjs();
-
-      const nearDueCount = (data ?? []).filter((reminder: ReminderProps) => {
-        const dueDate = dayjs(reminder.due_date_time);
-        const isPast = dueDate.isBefore(now, "day"); // before today
-        const isTodayOrTomorrow = dueDate.diff(now, "day") <= 1;
-
-        return isPast && isTodayOrTomorrow;
-      }).length;
-
-      setCount(nearDueCount);
       setReminders(data);
     }
 
@@ -110,30 +88,6 @@ export default function HomeScreen() {
     [fetchReminders]
   );
 
-  const handleAddNewItem = useCallback(async () => {
-    if (!authUser?.id) return;
-
-    if (!isEmpty(authUser?.id)) {
-      const { data, error } = await supabase
-        .from("reminders")
-        .insert({
-          user_id: authUser?.id,
-          title: null,
-          description: null,
-          due_date_time: null,
-        })
-        .select()
-        .single();
-
-      if (!error && data) {
-        setReminders((prev) => [data, ...prev]); // use the full object from Supabase
-        setNewlyAddedId(data?.id); // ✅ track the new ID for auto-focus
-      } else {
-        console.error("Failed to insert reminder:", error);
-      }
-    }
-  }, [authUser?.id]);
-
   const handleCheckItem = useCallback(
     async (item: ReminderProps) => {
       try {
@@ -141,7 +95,7 @@ export default function HomeScreen() {
 
         const { error } = await supabase
           .from("reminders")
-          .update({ is_completed: true })
+          .update({ is_completed: false })
           .eq("id", id);
 
         if (error) {
@@ -181,53 +135,7 @@ export default function HomeScreen() {
   );
 
   return (
-    <ThemedView style={{ flex: 1, paddingTop: insets.top + 16 }}>
-      <ThemedView
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 16,
-          alignItems: "center",
-        }}
-      >
-        <ThemedView
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          <Image
-            source={require("@/assets/images/logo/reminder-logo.png")}
-            style={styles.logo}
-          />
-          <ThemedView>
-            <ThemedText type="default" style={{ color: Colors[theme]?.text }}>
-              เริ่มจดบันทึกกัน!
-            </ThemedText>
-            <ThemedText type="title" style={{ color: Colors[theme]?.primary }}>
-              {profile?.username}
-            </ThemedText>
-          </ThemedView>
-        </ThemedView>
-
-        <NotificationBell count={count} onPress={() => null} />
-      </ThemedView>
-      <ThemedView
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          padding: 16,
-          paddingTop: 32,
-        }}
-      >
-        <ThemedText
-          type="defaultSemiBold"
-          style={{ color: Colors[theme]?.primary }}
-        >
-          รายการจดบันทึก
-        </ThemedText>
-      </ThemedView>
+    <ThemedView style={{ flex: 1, paddingTop: insets.top }}>
       <SwipeListView
         keyboardShouldPersistTaps="handled"
         data={reminders}
@@ -237,7 +145,6 @@ export default function HomeScreen() {
             item={item}
             theme={theme}
             onPress={handleChangeTitle}
-            autoFocus={item.id === newlyAddedId}
             onCheck={handleCheckItem}
             onEdit={() =>
               router.navigate({
@@ -245,6 +152,7 @@ export default function HomeScreen() {
                 params: { id: item?.id },
               })
             }
+            isCheck
           />
         )}
         renderHiddenItem={({ item }) => {
@@ -271,8 +179,6 @@ export default function HomeScreen() {
         onRowOpen={(rowKey) => setOpenRowKey(rowKey)}
         onRowClose={() => setOpenRowKey(null)}
       />
-
-      <FloatingAddButton onPress={handleAddNewItem} loading={loading} />
     </ThemedView>
   );
 }

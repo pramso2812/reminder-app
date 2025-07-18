@@ -6,15 +6,15 @@ type Profile = {
   username: string;
   email?: string;
   created_at?: string;
-  // Add any other fields you store in your `profile` table
 };
 
 type AuthContextType = {
-  authUser: any; // From supabase.auth
-  profile: Profile | null; // From `profile` table
+  authUser: any;
+  profile: Profile | null;
   session: any;
   loading: boolean;
   logout: () => Promise<void>;
+  getUser: () => Promise<void>; // ✅ Expose manual refetch
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,29 +25,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const getUser = async () => {
+    const { data } = await supabase.auth.getSession();
+    const currentSession = data?.session;
+    setSession(currentSession);
+    setAuthUser(currentSession?.user ?? null);
+
+    if (currentSession?.user?.id) {
+      const { data: profileData } = await supabase
+        .from("profile")
+        .select("*")
+        .eq("id", currentSession.user.id)
+        .single();
+
+      setProfile(profileData ?? null);
+    } else {
+      setProfile(null);
+    }
+  };
+
   useEffect(() => {
-    const restoreSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      const currentSession = data?.session;
-      setSession(currentSession);
-      setAuthUser(currentSession?.user ?? null);
+    getUser().finally(() => setLoading(false));
 
-      if (currentSession?.user?.id) {
-        const { data: profileData } = await supabase
-          .from("profile")
-          .select("*")
-          .eq("id", currentSession.user.id)
-          .single();
-
-        setProfile(profileData ?? null);
-      }
-
-      setLoading(false);
-    };
-
-    restoreSession();
-
-    // 🔁 Listen to auth changes
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         setSession(session);
@@ -81,7 +80,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ authUser, profile, session, loading, logout }}
+      value={{ authUser, profile, session, loading, logout, getUser }}
     >
       {children}
     </AuthContext.Provider>

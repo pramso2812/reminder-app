@@ -9,14 +9,19 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.petchprams.reminderapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.petchprams.reminderapp"
     },
     "web": {
       "bundler": "metro",
@@ -30,7 +35,6 @@
         {
           "image": "./assets/images/logo/reminder-logo.png",
           "imageWidth": 200,
-
           "backgroundColor": "#ffffff"
         }
       ],
@@ -38,6 +42,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b87c549f-ad83-4426-a6ab-cb915e71ffc8"
+      }
+    },
+    "owner": "petchprams"
   }
 }

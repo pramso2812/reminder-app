@@ -31,15 +31,17 @@ export function ReminderCard({
   autoFocus,
   onCheck,
   onEdit,
+  isCheck,
 }: {
   item: ReminderProps;
   theme: "light" | "dark";
   onPress: (item: ReminderProps) => void;
-  autoFocus: boolean;
+  autoFocus?: boolean;
   onCheck: (item: ReminderProps) => void;
   onEdit: (item: ReminderProps) => void;
+  isCheck?: boolean;
 }) {
-  const [checked, setChecked] = useState<boolean>(false);
+  const [checked, setChecked] = useState<boolean>(isCheck ?? false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>(item.title);
@@ -56,7 +58,7 @@ export function ReminderCard({
       <ThemedView
         style={[
           styles.card,
-          getReminderCardStyle(item?.due_date_time ?? "", theme),
+          getReminderCardStyle(item?.due_date_time ?? "", theme, isCheck),
         ]}
       >
         <View style={styles.row}>
@@ -103,7 +105,13 @@ export function ReminderCard({
             {!isEmpty(item?.due_date_time) && (
               <ThemedText
                 type="defaultSemiBold"
-                style={[getReminderTextStyle(item.due_date_time ?? "", theme)]}
+                style={[
+                  getReminderTextStyle(
+                    item.due_date_time ?? "",
+                    theme,
+                    isCheck
+                  ),
+                ]}
               >
                 {dayjs(item?.due_date_time)
                   .locale("th")

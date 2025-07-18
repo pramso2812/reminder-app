@@ -3,7 +3,8 @@ import { Colors } from "@/constants/Colors";
 
 export function getReminderCardStyle(
   dateString: string,
-  theme: "light" | "dark"
+  theme: "light" | "dark",
+  isCheck?: boolean
 ) {
   const now = dayjs();
   const dueDate = dayjs(dateString);
@@ -14,7 +15,9 @@ export function getReminderCardStyle(
 
   let bg = Colors[theme].primary + "1A";
 
-  if (isPast) {
+  if (isCheck) {
+    bg = Colors[theme].success + "1A"; // 10% opacity = hex "1A"
+  } else if (isPast) {
     bg = Colors[theme].error + "1A"; // 10% opacity = hex "1A"
   } else if (isTodayOrTomorrow) {
     bg = Colors[theme].secondary + "1A";

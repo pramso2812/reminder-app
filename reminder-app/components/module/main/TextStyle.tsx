@@ -3,7 +3,8 @@ import { Colors } from "@/constants/Colors";
 
 export function getReminderTextStyle(
   dateString: string,
-  theme: "light" | "dark"
+  theme: "light" | "dark",
+  isCheck?: boolean
 ) {
   const now = dayjs();
   const dueDate = dayjs(dateString);
@@ -13,7 +14,9 @@ export function getReminderTextStyle(
 
   let text = Colors[theme].text;
 
-  if (isPast) {
+  if (isCheck) {
+    text = Colors[theme].success;
+  } else if (isPast) {
     text = Colors[theme].error;
   } else if (isTodayOrTomorrow) {
     text = Colors[theme].secondary;
