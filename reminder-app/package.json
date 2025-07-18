@@ -24,6 +24,7 @@
     "@supabase/supabase-js": "2.39.1",
     "core-js": "^3.44.0",
     "dayjs": "^1.11.13",
+    "dotenv": "^17.2.0",
     "eas-cli": "^16.16.0",
     "expo": "~53.0.17",
     "expo-blur": "~14.1.5",
