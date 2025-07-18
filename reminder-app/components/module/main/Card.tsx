@@ -22,6 +22,7 @@ export interface ReminderProps {
   description: string | null;
   due_date_time: string | null;
   id: string;
+  is_completed?: boolean;
 }
 
 export function ReminderCard({
@@ -32,16 +33,20 @@ export function ReminderCard({
   onCheck,
   onEdit,
   isCheck,
+  isEditable = true,
+  selectedIds,
 }: {
   item: ReminderProps;
   theme: "light" | "dark";
-  onPress: (item: ReminderProps) => void;
+  onPress?: (item: ReminderProps) => void;
   autoFocus?: boolean;
   onCheck: (item: ReminderProps) => void;
-  onEdit: (item: ReminderProps) => void;
+  onEdit?: (item: ReminderProps) => void;
   isCheck?: boolean;
+  isEditable?: boolean;
+  selectedIds?: string[];
 }) {
-  const [checked, setChecked] = useState<boolean>(isCheck ?? false);
+  const [checked, setChecked] = useState<boolean>(item?.is_completed ?? false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>(item.title);
@@ -50,20 +55,26 @@ export function ReminderCard({
     Keyboard.dismiss();
 
     const body = { ...item, title: title };
-    onPress(body);
+    onPress && onPress(body);
   }, [item, title, onPress]);
+
+  const isSelected = selectedIds?.includes(item?.id);
 
   return (
     <TouchableWithoutFeedback onPress={handleClick}>
       <ThemedView
         style={[
           styles.card,
-          getReminderCardStyle(item?.due_date_time ?? "", theme, isCheck),
+          getReminderCardStyle(
+            item?.due_date_time ?? "",
+            theme,
+            item?.is_completed
+          ),
         ]}
       >
         <View style={styles.row}>
           <Checkbox
-            value={checked}
+            value={isSelected ?? checked}
             onValueChange={() => {
               setChecked(!checked);
 
@@ -74,6 +85,7 @@ export function ReminderCard({
           />
           <View style={{ width: "80%" }}>
             <TextInput
+              editable={isEditable}
               maxLength={25}
               value={title}
               onChangeText={setTitle}
@@ -109,7 +121,7 @@ export function ReminderCard({
                   getReminderTextStyle(
                     item.due_date_time ?? "",
                     theme,
-                    isCheck
+                    item?.is_completed
                   ),
                 ]}
               >
@@ -124,7 +136,7 @@ export function ReminderCard({
           <TouchableOpacity
             onPress={() => {
               setIsEditing(false);
-              onEdit(item);
+              onEdit && onEdit(item);
             }}
             activeOpacity={1}
           >

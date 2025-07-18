@@ -78,6 +78,38 @@ export default function ReminderLayout() {
           ),
         }}
       />
+      <Stack.Screen
+        name="delete"
+        options={{
+          header: () => (
+            <ThemedView
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                paddingHorizontal: 16,
+                paddingTop: insets?.top + 32,
+              }}
+            >
+              <Pressable onPress={() => router.back()}>
+                <IconSymbol
+                  name="chevron.left"
+                  size={24}
+                  color={Colors[theme].primary}
+                />
+              </Pressable>
+              <ThemedText
+                type="subtitle"
+                style={{
+                  marginLeft: 16,
+                  color: Colors[theme].primary,
+                }}
+              >
+                ลบจดบันทึก
+              </ThemedText>
+            </ThemedView>
+          ),
+        }}
+      />
     </Stack>
   );
 }

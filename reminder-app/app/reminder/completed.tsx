@@ -1,36 +1,34 @@
 import {
   Alert,
+  FlatList,
   Keyboard,
-  StyleSheet,
   TouchableOpacity,
   useColorScheme,
 } from "react-native";
 
 import { ThemedView } from "@/components/ThemedView";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Colors } from "@/constants/Colors";
-import { useFocusEffect, useRouter } from "expo-router";
 
-import { IconSymbol } from "@/components/ui/IconSymbol";
+import { useFocusEffect, useRouter } from "expo-router";
 
 import { ReminderCard } from "@/components/module/main/Card";
 import { useCallback, useState } from "react";
 
 import { type ReminderProps } from "@/components/module/main/Card";
-import { SwipeListView } from "react-native-swipe-list-view";
 
 import { supabase } from "@/lib/supabase";
+import { ThemedText } from "@/components/ThemedText";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { Colors } from "@/constants/Colors";
 
 export default function CompletedScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const theme = useColorScheme() ?? "light";
 
-  const [openRowKey, setOpenRowKey] = useState<string | null>(null);
-
   const [reminders, setReminders] = useState<ReminderProps[]>([]);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchReminders = useCallback(async () => {
     setLoading(true);
@@ -112,33 +110,38 @@ export default function CompletedScreen() {
     [fetchReminders]
   );
 
-  const handleDelete = useCallback(
-    async (id: string) => {
-      try {
-        const { error } = await supabase
-          .from("reminders")
-          .update({ is_deleted: true })
-          .eq("id", id);
-
-        if (error) {
-          console.error("Failed to update reminder:", error);
-          Alert.alert("ไม่สามารถบันทึกการเปลี่ยนแปลงได้");
-        } else {
-          fetchReminders();
-        }
-      } catch (err) {
-        console.error("Unexpected error:", err);
-        Alert.alert("เกิดข้อผิดพลาด", "โปรดลองใหม่อีกครั้ง");
-      }
-    },
-    [fetchReminders]
-  );
+  const handleDelete = useCallback(async () => {
+    router.navigate("/reminder/delete");
+  }, [router]);
 
   return (
     <ThemedView style={{ flex: 1, paddingTop: insets.top }}>
-      <SwipeListView
+      <ThemedView
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingHorizontal: 16,
+          paddingBottom: 16,
+        }}
+      >
+        <ThemedText
+          type="defaultSemiBold"
+          style={{ color: Colors[theme]?.primary }}
+        >
+          รายการจดบันทึก
+        </ThemedText>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleDelete}>
+          <IconSymbol
+            size={24}
+            name="trash.fill"
+            color={Colors[theme]?.primary}
+          />
+        </TouchableOpacity>
+      </ThemedView>
+      <FlatList
         keyboardShouldPersistTaps="handled"
         data={reminders}
+        contentContainerStyle={{ gap: 8, paddingBottom: 150 }}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ReminderCard
@@ -152,63 +155,9 @@ export default function CompletedScreen() {
                 params: { id: item?.id },
               })
             }
-            isCheck
           />
         )}
-        renderHiddenItem={({ item }) => {
-          return openRowKey === item.id ? (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => handleDelete(item.id)}
-              style={styles.rowBack}
-            >
-              <IconSymbol
-                size={24}
-                name="trash.fill"
-                color={Colors[theme]?.primary}
-              />
-            </TouchableOpacity>
-          ) : (
-            <ThemedView
-              style={[styles.rowBack, { backgroundColor: "transparent" }]}
-            />
-          );
-        }}
-        contentContainerStyle={{ gap: 8 }}
-        rightOpenValue={-75}
-        onRowOpen={(rowKey) => setOpenRowKey(rowKey)}
-        onRowClose={() => setOpenRowKey(null)}
       />
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-  },
-  logo: {
-    width: 72,
-    height: 72,
-  },
-  rowBack: {
-    alignItems: "flex-end",
-    justifyContent: "center",
-    paddingRight: 24,
-    borderRadius: 12,
-    height: 90,
-  },
-});

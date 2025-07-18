@@ -156,7 +156,7 @@ export default function ReminderForm() {
         {errors.title && (
           <ThemedText style={styles.error}>{errors.title.message}</ThemedText>
         )}
-        
+
         <TextInput
           defaultValue={watch("description")}
           placeholder="รายละเอียด (ไม่จำเป็น)"
@@ -246,7 +246,7 @@ export default function ReminderForm() {
           )}
         </View>
       </View>
-      <View style={styles.buttonContainer}>
+      <ThemedView style={styles.buttonContainer}>
         <Pressable
           style={[
             styles.button,
@@ -259,7 +259,7 @@ export default function ReminderForm() {
             {loading ? "กำลังเพิ่มจดบันทึก..." : "ยืนยัน"}
           </Text>
         </Pressable>
-      </View>
+      </ThemedView>
     </ThemedView>
   );
 }

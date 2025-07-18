@@ -1,6 +1,7 @@
 import { Image } from "expo-image";
 import {
   Alert,
+  FlatList,
   Keyboard,
   StyleSheet,
   TouchableOpacity,
@@ -20,7 +21,6 @@ import { ReminderCard } from "@/components/module/main/Card";
 import { useCallback, useState } from "react";
 import { FloatingAddButton } from "@/components/module/main/AddButton";
 import { type ReminderProps } from "@/components/module/main/Card";
-import { SwipeListView } from "react-native-swipe-list-view";
 
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/authContext";
@@ -37,7 +37,6 @@ export default function HomeScreen() {
   const { authUser, profile } = useAuth(); // ensure user is logged in
 
   const [newlyAddedId, setNewlyAddedId] = useState<string | null>(null);
-  const [openRowKey, setOpenRowKey] = useState<string | null>(null);
 
   const [reminders, setReminders] = useState<ReminderProps[]>([]);
   const [count, setCount] = useState<number>(0);
@@ -158,27 +157,9 @@ export default function HomeScreen() {
     [fetchReminders]
   );
 
-  const handleDelete = useCallback(
-    async (id: string) => {
-      try {
-        const { error } = await supabase
-          .from("reminders")
-          .update({ is_deleted: true })
-          .eq("id", id);
-
-        if (error) {
-          console.error("Failed to update reminder:", error);
-          Alert.alert("ไม่สามารถบันทึกการเปลี่ยนแปลงได้");
-        } else {
-          fetchReminders();
-        }
-      } catch (err) {
-        console.error("Unexpected error:", err);
-        Alert.alert("เกิดข้อผิดพลาด", "โปรดลองใหม่อีกครั้ง");
-      }
-    },
-    [fetchReminders]
-  );
+  const handleDelete = useCallback(async () => {
+    router.navigate("/reminder/delete");
+  }, [router]);
 
   return (
     <ThemedView style={{ flex: 1, paddingTop: insets.top + 16 }}>
@@ -227,10 +208,18 @@ export default function HomeScreen() {
         >
           รายการจดบันทึก
         </ThemedText>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleDelete}>
+          <IconSymbol
+            size={24}
+            name="trash.fill"
+            color={Colors[theme]?.primary}
+          />
+        </TouchableOpacity>
       </ThemedView>
-      <SwipeListView
+      <FlatList
         keyboardShouldPersistTaps="handled"
         data={reminders}
+        contentContainerStyle={{ gap: 8 }}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ReminderCard
@@ -247,29 +236,6 @@ export default function HomeScreen() {
             }
           />
         )}
-        renderHiddenItem={({ item }) => {
-          return openRowKey === item.id ? (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => handleDelete(item.id)}
-              style={styles.rowBack}
-            >
-              <IconSymbol
-                size={24}
-                name="trash.fill"
-                color={Colors[theme]?.primary}
-              />
-            </TouchableOpacity>
-          ) : (
-            <ThemedView
-              style={[styles.rowBack, { backgroundColor: "transparent" }]}
-            />
-          );
-        }}
-        contentContainerStyle={{ gap: 8 }}
-        rightOpenValue={-75}
-        onRowOpen={(rowKey) => setOpenRowKey(rowKey)}
-        onRowClose={() => setOpenRowKey(null)}
       />
 
       <FloatingAddButton onPress={handleAddNewItem} loading={loading} />
