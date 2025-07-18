@@ -36,7 +36,7 @@ See the system architecture and database schema (ER Diagram) here:
 ## 🔗 Project URLs
 - 🔧 [Download Android APK](https://expo.dev/accounts/petchprams/projects/reminder-app/builds/8ea5275c-fae7-4944-b770-19709af5d19f) (iOS not available — use `yarn start` and open with Expo Go)
 - 🎨 **Figma Design:** [https://www.figma.com/design/kScqYpSSJF7qdH3Q6pa8ve/Reminder-App?node-id=0-1&t=fdOdVuh1I9d5AvZf-1](https://www.figma.com/design/kScqYpSSJF7qdH3Q6pa8ve/Reminder-App?node-id=0-1&t=fdOdVuh1I9d5AvZf-1)
-
+- 📊 View the presentation here: [Reminder App – Canva Slides](https://www.canva.com/design/DAGtgGANotc/MW_4xKEdPYw3OiQhNzs1uw/edit)
 ---
 
 ## 🧪 Getting Started
