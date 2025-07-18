@@ -9,7 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { AuthProvider } from "@/contexts/authContext";
 import { useColorScheme } from "@/hooks/useColorScheme";
-
+import { MaterialIcons } from "@expo/vector-icons";
 import dayjs from "dayjs";
 import "dayjs/locale/th";
 import "core-js/actual/structured-clone";
@@ -19,6 +19,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    ...MaterialIcons.font,
   });
 
   if (!loaded) {

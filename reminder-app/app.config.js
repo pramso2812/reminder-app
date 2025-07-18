@@ -2,6 +2,7 @@ import "dotenv/config";
 
 export default {
   expo: {
+    assetBundlePatterns: ["**/*"],
     name: "reminder-app",
     slug: "reminder-app",
     version: "1.0.0",
