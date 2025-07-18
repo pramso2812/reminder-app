@@ -18,7 +18,7 @@ import { NotificationBell } from "@/components/module/main/NotificationBell";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 
 import { ReminderCard } from "@/components/module/main/Card";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import { FloatingAddButton } from "@/components/module/main/AddButton";
 import { type ReminderProps } from "@/components/module/main/Card";
 
@@ -42,6 +42,8 @@ export default function HomeScreen() {
   const [count, setCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
+  const hasAlertedRef = useRef(false); // 🧠 กันแสดงซ้ำ
+
   const fetchReminders = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase
@@ -56,13 +58,27 @@ export default function HomeScreen() {
     } else {
       const now = dayjs();
 
-      const nearDueCount = (data ?? []).filter((reminder: ReminderProps) => {
-        const dueDate = dayjs(reminder.due_date_time);
-        const isPast = dueDate.isBefore(now, "day"); // before today
-        const isTodayOrTomorrow = dueDate.diff(now, "day") <= 1;
+      const nearDueReminders = (data ?? []).filter(
+        (reminder: ReminderProps) => {
+          if (!reminder.due_date_time) return false;
 
-        return isPast && isTodayOrTomorrow;
-      }).length;
+          const dueDate = dayjs(reminder.due_date_time);
+          const isPast = dueDate.isBefore(now, "day");
+          const isTodayOrTomorrow = dueDate.diff(now, "day") <= 1;
+
+          return isPast || isTodayOrTomorrow;
+        }
+      );
+
+      const nearDueCount = nearDueReminders?.length;
+
+      if (nearDueCount > 0 && !hasAlertedRef.current) {
+        hasAlertedRef.current = true; // ✅ ตั้งค่าว่า alert แล้ว
+        Alert.alert(
+          "แจ้งเตือน",
+          `คุณมี ${nearDueCount} รายการที่ใกล้ครบกำหนดหรือเลยกำหนดแล้ว`
+        );
+      }
 
       setCount(nearDueCount);
       setReminders(data);
@@ -192,7 +208,10 @@ export default function HomeScreen() {
           </ThemedView>
         </ThemedView>
 
-        <NotificationBell count={count} onPress={() => null} />
+        <NotificationBell
+          count={count}
+          onPress={() => router.navigate("/reminder/notification")}
+        />
       </ThemedView>
       <ThemedView
         style={{

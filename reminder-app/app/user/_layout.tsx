@@ -12,38 +12,41 @@ export default function UserLayout() {
   const theme = useColorScheme() ?? "light";
   const insets = useSafeAreaInsets();
 
+  const headerComponent = (title: string) => {
+    return (
+      <ThemedView
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          paddingHorizontal: 16,
+          paddingTop: insets?.top + 32,
+        }}
+      >
+        <Pressable onPress={() => router.back()}>
+          <IconSymbol
+            name="chevron.left"
+            size={24}
+            color={Colors[theme].primary}
+          />
+        </Pressable>
+        <ThemedText
+          type="subtitle"
+          style={{
+            marginLeft: 16,
+            color: Colors[theme].primary,
+          }}
+        >
+          {title}
+        </ThemedText>
+      </ThemedView>
+    );
+  };
   return (
     <Stack>
       <Stack.Screen
         name="index"
         options={{
-          header: () => (
-            <ThemedView
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                paddingHorizontal: 16,
-                paddingTop: insets?.top + 32,
-              }}
-            >
-              <Pressable onPress={() => router.back()}>
-                <IconSymbol
-                  name="chevron.left"
-                  size={24}
-                  color={Colors[theme].primary}
-                />
-              </Pressable>
-              <ThemedText
-                type="subtitle"
-                style={{
-                  marginLeft: 16,
-                  color: Colors[theme].primary,
-                }}
-              >
-                แก้ไขบัญชี
-              </ThemedText>
-            </ThemedView>
-          ),
+          header: () => headerComponent("แก้ไขบัญชี"),
         }}
       />
     </Stack>

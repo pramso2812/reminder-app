@@ -12,102 +12,59 @@ export default function ReminderLayout() {
   const theme = useColorScheme() ?? "light";
   const insets = useSafeAreaInsets();
 
+  const headerComponent = (title: string) => {
+    return (
+      <ThemedView
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          paddingHorizontal: 16,
+          paddingTop: insets?.top + 32,
+        }}
+      >
+        <Pressable onPress={() => router.back()}>
+          <IconSymbol
+            name="chevron.left"
+            size={24}
+            color={Colors[theme].primary}
+          />
+        </Pressable>
+        <ThemedText
+          type="subtitle"
+          style={{
+            marginLeft: 16,
+            color: Colors[theme].primary,
+          }}
+        >
+          {title}
+        </ThemedText>
+      </ThemedView>
+    );
+  };
   return (
     <Stack>
       <Stack.Screen
         name="index"
         options={{
-          header: () => (
-            <ThemedView
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                paddingHorizontal: 16,
-                paddingTop: insets?.top + 32,
-              }}
-            >
-              <Pressable onPress={() => router.back()}>
-                <IconSymbol
-                  name="chevron.left"
-                  size={24}
-                  color={Colors[theme].primary}
-                />
-              </Pressable>
-              <ThemedText
-                type="subtitle"
-                style={{
-                  marginLeft: 16,
-                  color: Colors[theme].primary,
-                }}
-              >
-                จดบันทึก
-              </ThemedText>
-            </ThemedView>
-          ),
+          header: () => headerComponent("จดบันทึก"),
         }}
       />
       <Stack.Screen
         name="completed"
         options={{
-          header: () => (
-            <ThemedView
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                paddingHorizontal: 16,
-                paddingTop: insets?.top + 32,
-              }}
-            >
-              <Pressable onPress={() => router.back()}>
-                <IconSymbol
-                  name="chevron.left"
-                  size={24}
-                  color={Colors[theme].primary}
-                />
-              </Pressable>
-              <ThemedText
-                type="subtitle"
-                style={{
-                  marginLeft: 16,
-                  color: Colors[theme].primary,
-                }}
-              >
-                บันทึกที่สำเร็จแล้ว
-              </ThemedText>
-            </ThemedView>
-          ),
+          header: () => headerComponent("บันทึกที่สำเร็จแล้ว"),
         }}
       />
       <Stack.Screen
         name="delete"
         options={{
-          header: () => (
-            <ThemedView
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                paddingHorizontal: 16,
-                paddingTop: insets?.top + 32,
-              }}
-            >
-              <Pressable onPress={() => router.back()}>
-                <IconSymbol
-                  name="chevron.left"
-                  size={24}
-                  color={Colors[theme].primary}
-                />
-              </Pressable>
-              <ThemedText
-                type="subtitle"
-                style={{
-                  marginLeft: 16,
-                  color: Colors[theme].primary,
-                }}
-              >
-                ลบจดบันทึก
-              </ThemedText>
-            </ThemedView>
-          ),
+          header: () => headerComponent("ลบบันทึก"),
+        }}
+      />
+      <Stack.Screen
+        name="notification"
+        options={{
+          header: () => headerComponent("แจ้งเตือน"),
         }}
       />
     </Stack>
