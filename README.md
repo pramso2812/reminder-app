@@ -27,7 +27,7 @@
 
 See the system architecture and database schema (ER Diagram) here:
 
-- 📄 [System Flow + ER Diagram (PDF)](./🧭 Reminder App - System Flow & ER Diagram.pdf)
+- 📄 [System Flow + ER Diagram (PDF)](./reminder-system-flow-er-diagram.pdf)
 
 > ✅ Make sure the PDF file is uploaded to the repo or replace the path above accordingly.
 
