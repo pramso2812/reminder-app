@@ -17,6 +17,7 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
+import { MaterialIcons } from "@expo/vector-icons";
 
 // 🧠 Schema
 const registerSchema = z
@@ -50,6 +51,9 @@ export default function RegisterScreen() {
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
   });
+
+  const [secure, setSecure] = useState<boolean>(true);
+  const [secureSecond, setSecureSecond] = useState<boolean>(true);
 
   const [loading, setLoading] = useState(false);
 
@@ -136,36 +140,64 @@ export default function RegisterScreen() {
         {errors.email && (
           <Text style={styles.error}>{errors.email.message}</Text>
         )}
+        <View style={{ justifyContent: "center" }}>
+          <View>
+            <TextInput
+              placeholder="รหัสผ่าน"
+              secureTextEntry={secure}
+              style={{
+                ...styles.input,
+                color: Colors[theme].text, // 🌓 adjusts text color
+                backgroundColor: Colors[theme].background, // 🌓 adjusts text color
+              }}
+              onChangeText={(text) => {
+                setValue("password", text);
+              }}
+            />
 
-        <TextInput
-          placeholder="รหัสผ่าน"
-          secureTextEntry
-          style={{
-            ...styles.input,
-            color: Colors[theme].text, // 🌓 adjusts text color
-            backgroundColor: Colors[theme].background, // 🌓 adjusts text color
-          }}
-          onChangeText={(text) => {
-            setValue("password", text);
-          }}
-        />
-        {errors.password && (
-          <Text style={styles.error}>{errors.password.message}</Text>
-        )}
+            <TouchableOpacity
+              onPress={() => setSecure(!secure)}
+              style={{ position: "absolute", right: 16, bottom: 24 }}
+            >
+              <MaterialIcons
+                name={secure ? "visibility-off" : "visibility"}
+                size={24}
+                color={Colors[theme].primary}
+              />
+            </TouchableOpacity>
+          </View>
+          {errors.password && (
+            <Text style={styles.error}>{errors.password.message}</Text>
+          )}
+        </View>
+        <View style={{ justifyContent: "center" }}>
+          <View>
+            <TextInput
+              placeholder="ยืนยันรหัสผ่าน"
+              secureTextEntry={secureSecond}
+              style={{
+                ...styles.input,
+                color: Colors[theme].text, // 🌓 adjusts text color
+                backgroundColor: Colors[theme].background, // 🌓 adjusts text color
+              }}
+              onChangeText={(text) => setValue("confirmPassword", text)}
+            />
+            <TouchableOpacity
+              onPress={() => setSecureSecond(!secureSecond)}
+              style={{ position: "absolute", right: 16, bottom: 24 }}
+            >
+              <MaterialIcons
+                name={secureSecond ? "visibility-off" : "visibility"}
+                size={24}
+                color={Colors[theme].primary}
+              />
+            </TouchableOpacity>
+          </View>
+          {errors.confirmPassword && (
+            <Text style={styles.error}>{errors.confirmPassword.message}</Text>
+          )}
+        </View>
 
-        <TextInput
-          placeholder="ยืนยันรหัสผ่าน"
-          secureTextEntry
-          style={{
-            ...styles.input,
-            color: Colors[theme].text, // 🌓 adjusts text color
-            backgroundColor: Colors[theme].background, // 🌓 adjusts text color
-          }}
-          onChangeText={(text) => setValue("confirmPassword", text)}
-        />
-        {errors.confirmPassword && (
-          <Text style={styles.error}>{errors.confirmPassword.message}</Text>
-        )}
         <Pressable
           style={styles.button}
           onPress={handleSubmit(onSubmit)}

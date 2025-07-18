@@ -140,26 +140,29 @@ export default function AuthScreen() {
         )}
         <View style={{ justifyContent: "center" }}>
           {/* Password */}
-          <TextInput
-            placeholder="รหัสผ่าน"
-            style={{
-              ...styles.input,
-              color: Colors[theme].text, // 🌓 adjusts text color
-              backgroundColor: Colors[theme].background, // 🌓 adjusts text color
-            }}
-            secureTextEntry={secure}
-            onChangeText={(text) => setValue("password", text)}
-          />
-          <TouchableOpacity
-            onPress={() => setSecure(!secure)}
-            style={{ position: "absolute", right: 16, bottom: 24 }}
-          >
-            <MaterialIcons
-              name={secure ? "visibility-off" : "visibility"}
-              size={24}
-              color={Colors[theme].primary}
+          <View>
+            <TextInput
+              placeholder="รหัสผ่าน"
+              style={{
+                ...styles.input,
+                color: Colors[theme].text, // 🌓 adjusts text color
+                backgroundColor: Colors[theme].background, // 🌓 adjusts text color
+              }}
+              secureTextEntry={secure}
+              onChangeText={(text) => setValue("password", text)}
             />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setSecure(!secure)}
+              style={{ position: "absolute", right: 16, bottom: 24 }}
+            >
+              <MaterialIcons
+                name={secure ? "visibility-off" : "visibility"}
+                size={24}
+                color={Colors[theme].primary}
+              />
+            </TouchableOpacity>
+          </View>
+
           {errors.password && (
             <Text style={styles.error}>{errors.password.message}</Text>
           )}

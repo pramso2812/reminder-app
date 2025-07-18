@@ -29,8 +29,8 @@ dayjs.locale("th");
 // ✅ Zod Schema
 const reminderSchema = z.object({
   title: z.string().min(1, "กรุณากรอกชื่อเรื่อง"),
-  description: z.string().optional(),
-  date: z.date().nullable().optional(),
+  description: z.string().optional().nullable(),
+  date: z.date().nullable().optional().nullable(),
 });
 
 // ✅ Infer form type
@@ -87,6 +87,8 @@ export default function ReminderForm() {
     },
   });
 
+  const date = watch("date");
+
   const fetchReminders = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase
@@ -100,7 +102,7 @@ export default function ReminderForm() {
       const reminder = data[0];
       setValue("title", reminder?.title);
       setValue("description", reminder?.description ?? "");
-      setValue("date", reminder?.due_date_time ?? "");
+      setValue("date", new Date(reminder?.due_date_time) ?? "");
     }
 
     setLoading(false);
@@ -158,7 +160,7 @@ export default function ReminderForm() {
         )}
 
         <TextInput
-          defaultValue={watch("description")}
+          defaultValue={watch("description") ?? ""}
           placeholder="รายละเอียด (ไม่จำเป็น)"
           style={{
             ...styles.input,
@@ -200,7 +202,7 @@ export default function ReminderForm() {
             <View>
               <DateTimePicker
                 locale="th-TH"
-                value={watch("date") || new Date()}
+                value={isEmpty(date) ? new Date() : new Date(date?.toString())}
                 mode="date"
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={handleDateChange}
@@ -209,7 +211,9 @@ export default function ReminderForm() {
                 <Button
                   title="บันทึกวันที่"
                   onPress={() => {
-                    const selectedDate = watch("date") || new Date();
+                    const selectedDate = isEmpty(date)
+                      ? new Date()
+                      : new Date(date?.toString());
                     handleDateChange(
                       { type: "set" } as any, // 👈 mimic DateTimePickerEvent
                       selectedDate
@@ -224,7 +228,7 @@ export default function ReminderForm() {
             <View>
               <DateTimePicker
                 locale="th-TH"
-                value={watch("date") || new Date()}
+                value={isEmpty(date) ? new Date() : new Date(date?.toString())}
                 mode="time"
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={handleTimeChange}
@@ -233,7 +237,9 @@ export default function ReminderForm() {
                 <Button
                   title="บันทึกเวลา"
                   onPress={() => {
-                    const selectedDate = watch("date") || new Date();
+                    const selectedDate = isEmpty(date)
+                      ? new Date()
+                      : new Date(date?.toString());
                     handleTimeChange(
                       { type: "set" } as any, // 👈 mimic DateTimePickerEvent
                       selectedDate

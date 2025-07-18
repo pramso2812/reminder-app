@@ -39,6 +39,7 @@ export default function HomeScreen() {
   const [newlyAddedId, setNewlyAddedId] = useState<string | null>(null);
 
   const [reminders, setReminders] = useState<ReminderProps[]>([]);
+
   const [count, setCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
@@ -239,13 +240,13 @@ export default function HomeScreen() {
         keyboardShouldPersistTaps="handled"
         data={reminders}
         contentContainerStyle={{ gap: 8 }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
           <ReminderCard
             item={item}
             theme={theme}
             onPress={handleChangeTitle}
-            autoFocus={item.id === newlyAddedId}
+            autoFocus={item?.id === newlyAddedId}
             onCheck={handleCheckItem}
             onEdit={() =>
               router.navigate({

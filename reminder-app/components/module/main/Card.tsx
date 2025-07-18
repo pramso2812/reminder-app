@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Checkbox } from "expo-checkbox";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
@@ -47,10 +47,10 @@ export function ReminderCard({
   isEditable?: boolean;
   selectedIds?: string[];
 }) {
-  const [checked, setChecked] = useState<boolean>(item?.is_completed ?? false);
+  const [checked, setChecked] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  const [title, setTitle] = useState<string>(item.title);
+  const [title, setTitle] = useState<string>("");
 
   const handleClick = useCallback(() => {
     Keyboard.dismiss();
@@ -61,6 +61,11 @@ export function ReminderCard({
 
   const isSelected = selectedIds?.includes(item?.id);
 
+  useEffect(() => {
+    if (!isEmpty(item?.title)) setTitle(item?.title);
+
+    if (item?.is_completed) setChecked(item?.is_completed ?? false);
+  }, [item?.is_completed, item?.title]);
   return (
     <TouchableWithoutFeedback onPress={handleClick}>
       <ThemedView
