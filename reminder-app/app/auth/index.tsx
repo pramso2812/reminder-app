@@ -19,7 +19,7 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 
 import { useState } from "react";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+import { MaterialIcons } from "@expo/vector-icons";
 const loginSchema = z.object({
   email: z.email("อีเมลไม่ถูกต้อง"),
   password: z.string().min(8, "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"),
@@ -154,8 +154,8 @@ export default function AuthScreen() {
             onPress={() => setSecure(!secure)}
             style={{ position: "absolute", right: 16, bottom: 24 }}
           >
-            <IconSymbol
-              name={secure ? "eye.slash" : "eye"}
+            <MaterialIcons
+              name={secure ? "visibility-off" : "visibility"}
               size={24}
               color={Colors[theme].primary}
             />

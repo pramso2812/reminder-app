@@ -3,11 +3,11 @@ import React from "react";
 import { Platform } from "react-native";
 
 import { HapticTab } from "@/components/HapticTab";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-
+import { MaterialIcons } from "@expo/vector-icons";
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
@@ -32,7 +32,7 @@ export default function TabLayout() {
         options={{
           title: "หน้าหลัก",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            <MaterialIcons name="house" size={28} color={color} />
           ),
         }}
       />
@@ -41,7 +41,7 @@ export default function TabLayout() {
         options={{
           title: "บัญชี",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="person.fill" color={color} />
+            <MaterialIcons name="person" size={28} color={color} />
           ),
         }}
       />

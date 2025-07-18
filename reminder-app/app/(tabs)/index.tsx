@@ -15,7 +15,6 @@ import { Colors } from "@/constants/Colors";
 import { useFocusEffect, useRouter } from "expo-router";
 
 import { NotificationBell } from "@/components/module/main/NotificationBell";
-import { IconSymbol } from "@/components/ui/IconSymbol";
 
 import { ReminderCard } from "@/components/module/main/Card";
 import { useCallback, useState, useRef } from "react";
@@ -28,6 +27,7 @@ import { useAuth } from "@/contexts/authContext";
 import { isEmpty } from "lodash";
 
 import dayjs from "dayjs";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -228,9 +228,9 @@ export default function HomeScreen() {
           รายการจดบันทึก
         </ThemedText>
         <TouchableOpacity activeOpacity={0.7} onPress={handleDelete}>
-          <IconSymbol
+          <MaterialIcons
+            name="delete"
             size={24}
-            name="trash.fill"
             color={Colors[theme]?.primary}
           />
         </TouchableOpacity>

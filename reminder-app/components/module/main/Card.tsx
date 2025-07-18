@@ -11,11 +11,12 @@ import { useCallback, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+
 import dayjs from "dayjs";
 import { getReminderCardStyle } from "./CardStyle";
 import { getReminderTextStyle } from "./TextStyle";
 import { isEmpty } from "lodash";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export interface ReminderProps {
   title: string;
@@ -140,7 +141,11 @@ export function ReminderCard({
             }}
             activeOpacity={1}
           >
-            <IconSymbol name="pencil" size={24} color={Colors[theme].primary} />
+            <MaterialIcons
+              name="edit"
+              size={24}
+              color={Colors[theme]?.primary}
+            />
           </TouchableOpacity>
         )}
       </ThemedView>

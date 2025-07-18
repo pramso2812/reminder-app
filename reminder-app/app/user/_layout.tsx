@@ -1,11 +1,12 @@
 import { Stack, useRouter } from "expo-router";
 import { Pressable, useColorScheme } from "react-native";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function UserLayout() {
   const router = useRouter();
@@ -23,10 +24,10 @@ export default function UserLayout() {
         }}
       >
         <Pressable onPress={() => router.back()}>
-          <IconSymbol
-            name="chevron.left"
-            size={24}
-            color={Colors[theme].primary}
+          <MaterialIcons
+            name="chevron-left"
+            size={32}
+            color={Colors[theme]?.primary}
           />
         </Pressable>
         <ThemedText

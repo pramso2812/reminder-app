@@ -18,7 +18,7 @@ import { type ReminderProps } from "@/components/module/main/Card";
 
 import { supabase } from "@/lib/supabase";
 import { ThemedText } from "@/components/ThemedText";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 
 export default function CompletedScreen() {
@@ -131,9 +131,9 @@ export default function CompletedScreen() {
           รายการจดบันทึก
         </ThemedText>
         <TouchableOpacity activeOpacity={0.7} onPress={handleDelete}>
-          <IconSymbol
+          <MaterialIcons
+            name="delete"
             size={24}
-            name="trash.fill"
             color={Colors[theme]?.primary}
           />
         </TouchableOpacity>

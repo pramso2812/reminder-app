@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+
 import { Colors } from "@/constants/Colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export function NotificationBell({
   count = 0,
@@ -14,9 +15,9 @@ export function NotificationBell({
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <View style={styles.iconContainer}>
-        <IconSymbol
+        <MaterialCommunityIcons
+          name="bell"
           size={32}
-          name="bell.fill"
           color={Colors[theme]?.secondary}
         />
         {count > 0 && (

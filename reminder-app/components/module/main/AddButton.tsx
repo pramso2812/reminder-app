@@ -1,9 +1,9 @@
 import { StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
 
-import { IconSymbol } from "@/components/ui/IconSymbol";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/ThemedText";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export function FloatingAddButton({
   onPress,
@@ -19,13 +19,13 @@ export function FloatingAddButton({
     <TouchableOpacity
       style={[
         styles.button,
-        { backgroundColor: Colors[theme].primary, bottom: insets.bottom + 100 },
+        { backgroundColor: Colors[theme].primary, bottom: insets.bottom + 64 },
       ]}
       onPress={onPress}
       disabled={loading}
       activeOpacity={0.7}
     >
-      <IconSymbol name="plus" size={20} color="#fff" />
+      <MaterialIcons name="add" size={24} color={Colors["light"]?.background} />
       <ThemedText style={{ ...styles.text }}>เพิ่มรายการ</ThemedText>
     </TouchableOpacity>
   );

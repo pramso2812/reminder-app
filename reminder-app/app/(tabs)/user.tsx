@@ -12,8 +12,8 @@ import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/authContext";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
 
+import { MaterialIcons } from "@expo/vector-icons";
 export default function UserScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -64,9 +64,9 @@ export default function UserScreen() {
               { borderColor: Colors[theme].primary },
             ]}
           >
-            <IconSymbol
+            <MaterialIcons
+              name="notes"
               size={24}
-              name="list.clipboard.fill"
               color={Colors[theme]?.primary}
             />
             <ThemedText
@@ -83,9 +83,9 @@ export default function UserScreen() {
               { borderColor: Colors[theme].primary },
             ]}
           >
-            <IconSymbol
+            <MaterialIcons
+              name="person"
               size={24}
-              name="person.fill"
               color={Colors[theme]?.primary}
             />
             <ThemedText
