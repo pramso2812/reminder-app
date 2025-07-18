@@ -44,7 +44,7 @@ See the system architecture and database schema (ER Diagram) here:
 
 ```bash
 # 1. Clone this repo
-git clone [https://github.com/your-username/reminder-app.git](https://github.com/pramso2812/reminder-app.git)
+git clone https://github.com/pramso2812/reminder-app.git
 cd reminder-app
 
 # 2. Install dependencies
