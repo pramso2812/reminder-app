@@ -36,7 +36,7 @@ See the system architecture and database schema (ER Diagram) here:
 ## 🔗 Project URLs
 
 - 🌐 **Supabase Project URL:** [https://supabase.com/dashboard/project/njcecwllmoyytvlvybjj](https://supabase.com/dashboard/project/njcecwllmoyytvlvybjj)
-- 🎨 **Figma Design:** [https://www.figma.com/team_invite/redeem/RRme6Hlsad2n5NMWr6QC26](https://www.figma.com/team_invite/redeem/RRme6Hlsad2n5NMWr6QC26)
+- 🎨 **Figma Design:** [https://www.figma.com/design/kScqYpSSJF7qdH3Q6pa8ve/Reminder-App?node-id=0-1&t=fdOdVuh1I9d5AvZf-1](https://www.figma.com/design/kScqYpSSJF7qdH3Q6pa8ve/Reminder-App?node-id=0-1&t=fdOdVuh1I9d5AvZf-1)
 
 ---
 
